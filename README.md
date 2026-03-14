@@ -1,5 +1,7 @@
 # Customer Churn model
 
+[![Live on Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ccpmsklearn.streamlit.app/)
+
 Streamlit application and training workflow for predicting customer churn from
 the Telco Customer Churn dataset.
 
