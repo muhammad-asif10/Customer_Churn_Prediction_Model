@@ -1,0 +1,16 @@
+# NOTICE
+
+Customer Churn model
+Copyright 2026 Muhammad Asif
+
+This repository's source code is licensed under the Apache License, Version 2.0.
+
+Dataset attribution:
+The file WA_Fn-UseC_-Telco-Customer-Churn.csv is identified in the project
+notebook as originating from the Kaggle dataset "Telco Customer Churn" by
+blastchar: [Telco Customer Churn](https://www.kaggle.com/blastchar/telco-customer-churn)
+
+Third-party assets may be subject to separate licenses or platform terms.
+Verify redistribution rights before reusing the dataset or bundled images
+outside this repository. The provenance of files under images/ is not
+documented in this repository.
