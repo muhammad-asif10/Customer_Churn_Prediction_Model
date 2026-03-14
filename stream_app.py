@@ -1,7 +1,7 @@
-import pickle
 import streamlit as st
-import pandas as pd
 from PIL import Image
+import pandas as pd
+import pickle
 
 # Load model
 model_file = 'model_C=1.0.bin'
@@ -9,21 +9,16 @@ with open(model_file, 'rb') as f_in:
     dv, model = pickle.load(f_in)
 
 def main():
-    # App Header
     st.set_page_config(page_title="Customer Churn Predictor", page_icon="📊", layout="wide")
     
     image = Image.open('images/icone.png')
-    st.image(image, width=700)  # Updated: use width instead of use_column_width
+    st.image(image, width=730)
     st.title("Customer Churn Prediction")
     st.markdown("Predict if a customer is likely to churn and get a risk score.")
 
-    # Sidebar
-    add_selectbox = st.sidebar.selectbox(
-        "Prediction Mode",
-        ("Online", "Batch")
-    )
+    add_selectbox = st.sidebar.selectbox("Prediction Mode", ("Online", "Batch"))
     st.sidebar.info("This app predicts Customer Churn using ML models.")
-    st.sidebar.image(Image.open('images/image.png'), width=200)  # Updated: width
+    st.sidebar.image(Image.open('images/image.png'), width=200)
 
     if add_selectbox == "Online":
         with st.form("churn_form"):
@@ -87,17 +82,27 @@ def main():
                 y_pred = model.predict_proba(X)[0, 1]
                 churn = y_pred >= 0.5
 
-                st.metric(label="Churn Risk", value=f"{y_pred:.2%}", delta="High" if churn else "Low")
-                st.success(f"Predicted Churn: {churn}")
+                # Risk percent and traffic-light
+                risk_percent = int(y_pred * 100)
+                if risk_percent < 30:
+                    color = "green"
+                    icon = "🟢"
+                elif risk_percent < 70:
+                    color = "yellow"
+                    icon = "🟡"
+                else:
+                    color = "red"
+                    icon = "🔴"
 
-    elif add_selectbox == "Batch":
-        file_upload = st.file_uploader("Upload CSV for batch prediction", type=["csv"])
-        if file_upload:
-            data = pd.read_csv(file_upload)
-            X = dv.transform(data.to_dict(orient="records"))
-            y_pred = model.predict_proba(X)[:, 1]
-            results = pd.DataFrame({"Churn_Probability": y_pred, "Churn_Prediction": y_pred >= 0.5})
-            st.dataframe(results)
+                st.markdown(f"**Churn Risk:** {icon} {risk_percent}%")
+                # Colored progress bar
+                st.markdown(f"""
+                <div style="background-color: #e0e0e0; border-radius: 5px; padding: 5px; width: 100%;">
+                    <div style="width:{risk_percent}%; background-color:{color}; height:20px; border-radius:5px;"></div>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.success(f"Predicted Churn: {churn}")
 
 if __name__ == "__main__":
     main()
